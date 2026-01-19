@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Здоровая Жизнь — Анализ еды</title>
+  <style>
+    :root{
+      --bg:#F6F7FB;
+      --card:#FFFFFF;
+      --text:#0F172A;
+      --muted:#64748B;
+      --muted2:#94A3B8;
+      --line:#E5E7EB;
+
+      --blue:#2563EB;
+      --blue-100:#EEF6FF;
+
+      --sand:#FFF8E6; /* желтоватая плашка в макете */
+      --sand-line:#F1E7C8;
+
+      --orange:#F97316;
+      --orange-100:#FFF1E6;
+
+      --shadow: 0 10px 26px rgba(15, 23, 42, .06);
+      --radius: 14px;
+
+      --container: 1120px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* ===== Header ===== */
+    .topbar{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:14px 18px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:260px;
+    }
+    .logo{
+      width:42px;height:42px;
+      border-radius:14px;
+      display:grid;place-items:center;
+      background:linear-gradient(180deg,#34D399,#22C55E);
+      box-shadow:0 6px 14px rgba(34,197,94,.18);
+      flex:0 0 auto;
+    }
+    .logo svg{ width:22px;height:22px; }
+
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      line-height:1.05;
+    }
+    .brand-title{
+      font-weight:900;
+      font-size:18px;
+    }
+    .brand-sub{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:22px;
+      padding-top:6px;
+      flex-wrap:wrap;
+    }
+    .nav a{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#334155;
+      text-decoration:none;
+      font-size:14px;
+      padding:8px 10px;
+      border-radius:10px;
+      transition:.15s ease;
+      position:relative;
+    }
+    .nav a:hover{ background:#F1F5F9; }
+    .nav a.active{
+      color:var(--blue);
+      font-weight:800;
+    }
+    .nav a.active::after{
+      content:"";
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:-10px;
+      height:3px;
+      border-radius:999px;
+      background:var(--blue);
+    }
+    .nav svg{ width:16px;height:16px; }
+
+    /* ===== Main ===== */
+    .container{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:18px 18px 44px;
+    }
+
+    /* Hero (yellow banner) */
+    .hero{
+      background:linear-gradient(90deg, #FFF8E6 0%, #FFF8E6 55%, #FFF9EA 100%);
+      border:1px solid #F1E7C8;
+      border-radius:18px;
+      padding:26px 26px;
+      box-shadow:0 10px 22px rgba(15,23,42,.04);
+      margin-top:12px;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size:34px;
+      letter-spacing:-.6px;
+    }
+    .hero p{
+      margin:0;
+      color:#475569;
+      max-width:900px;
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    /* Two cards row */
+    .row{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      min-height: 270px;
+    }
+    .card h3{
+      margin:0 0 6px;
+      font-size:15px;
+      font-weight:900;
+    }
+    .sub{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* Upload area */
+    .drop{
+      border:2px solid #E5E7EB;
+      border-radius:12px;
+      background:#fff;
+      height: 190px;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .drop.is-drag{
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 4px rgba(249,115,22,.12);
+      background: #FFFBF5;
+    }
+    .drop-inner{
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      color:var(--muted);
+      max-width: 320px;
+    }
+    .cam-ico{
+      width:54px;height:54px;
+      border-radius:16px;
+      display:grid;place-items:center;
+      color:#9CA3AF;
+    }
+    .cam-ico svg{ width:54px;height:54px; }
+    .upload-action{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      align-items:center;
+    }
+    .link{
+      color: var(--orange);
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+    }
+    .small{
+      font-size:12px;
+      color:var(--muted2);
+      margin-top:2px;
+    }
+
+    /* Preview inside upload */
+    .preview{
+      position:absolute;
+      inset:0;
+      display:none;
+      background:#fff;
+    }
+    .preview img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .preview .badge{
+      position:absolute;
+      left:12px;
+      top:12px;
+      background:rgba(15,23,42,.78);
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:999px;
+      backdrop-filter: blur(6px);
+    }
+    .preview .reset{
+      position:absolute;
+      right:12px;
+      top:12px;
+      width:34px;height:34px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(15,23,42,.65);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+    }
+    .preview .reset svg{ width:18px;height:18px; }
+
+    /* Results area */
+    .results-center{
+      height: 210px;
+      display:grid;
+      place-items:center;
+      color:var(--muted2);
+      text-align:center;
+      border-radius:12px;
+    }
+    .results-center .cam-ico{ color:#9CA3AF; }
+    .results-center .text{
+      margin-top:8px;
+      font-size:14px;
+      font-weight:700;
+      color:#94A3B8;
+    }
+
+    .results{
+      display:none;
+      margin-top:6px;
+    }
+    .res-line{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 8px 0 12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      font-weight:900;
+      border:1px solid rgba(37,99,235,.18);
+      background: rgba(37,99,235,.10);
+      color:#1D4ED8;
+    }
+    .pill.orange{
+      border-color: rgba(249,115,22,.18);
+      background: rgba(249,115,22,.10);
+      color:#C2410C;
+    }
+    .pill.green{
+      border-color: rgba(22,163,74,.18);
+      background: rgba(22,163,74,.10);
+      color:#15803D;
+    }
+
+    .block{
+      border-top:1px solid #F1F5F9;
+      padding-top:12px;
+      margin-top:10px;
+    }
+    .block-title{
+      font-weight:900;
+      font-size:13px;
+      margin:0 0 6px;
+    }
+    .ul{
+      margin:0;
+      padding-left:18px;
+      color:#334155;
+      font-size:13px;
+      line-height:1.6;
+    }
+    .ul li{ margin:4px 0; }
+
+    .note{
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    /* Bottom feature cards */
+    .features{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+    }
+    .feat{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      box-shadow:var(--shadow);
+      padding:16px 16px;
+      min-height: 92px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .feat .ico{
+      width:28px;height:28px;
+      display:grid;place-items:center;
+      color:#334155;
+      flex:0 0 auto;
+      margin-top:2px;
+    }
+    .feat h4{
+      margin:0 0 6px;
+      font-size:14px;
+      font-weight:900;
+    }
+    .feat p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    /* Footer */
+    .footer{
+      margin-top:28px;
+      border-top:1px solid var(--line);
+      background:#fff;
+    }
+    .footer-inner{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:14px 18px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    @media (max-width: 1050px){
+      .topbar-inner{ flex-direction:column; align-items:flex-start; }
+      .nav a.active::after{ display:none; }
+      .row{ grid-template-columns: 1fr; }
+      .features{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <!-- salad bowl -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 13c.7 5.2 4.1 8 8 8s7.3-2.8 8-8H4Z" fill="#fff" opacity=".95"/>
+            <path d="M6.2 11.6c1.2-1.9 3.4-3.1 5.8-3.1 2.3 0 4.5 1.2 5.7 3.1" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8.2 8.2c.7-1.7 2.1-3 3.8-3.7" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">Batyr Sport</div>
+          <div class="brand-sub">AI помощник по питанию</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Навигация">
+        <a href="index.html">
+          <!-- home -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          Главная
+        </a>
+
+        <a href="chat.html">
+          <!-- chat -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M21 12a7 7 0 0 1-7 7H8l-5 3 1.6-4.8A7 7 0 1 1 21 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          AI Чат-бот
+        </a>
+
+        <a class="active" href="#">
+          <!-- camera/doc -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 11h8M8 15h6M8 7h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Анализ еды
+        </a>
+
+        <a href="profile.html">
+          <!-- profile -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Профиль
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container">
+    <section class="hero">
+      <h1>Анализ еды по фото</h1>
+      <p>
+        Загрузите фотографию блюда, и AI определит калорийность, состав и даст персональные рекомендации с учетом вашего здоровья<br>
+        и религиозных предпочтений
+      </p>
+    </section>
+
+    <section class="row">
+      <!-- Upload card -->
+      <div class="card">
+        <h3>Загрузите фото блюда</h3>
+        <p class="sub">Поддерживаются форматы: JPG, PNG, HEIC</p>
+
+        <div id="drop" class="drop" role="button" tabindex="0" aria-label="Зона загрузки">
+          <div class="drop-inner">
+            <div class="cam-ico" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M22 18h7l3-4h10l3 4h7a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H22a6 6 0 0 1-6-6V24a6 6 0 0 1 6-6Z" stroke="#9CA3AF" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M32 44a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="#9CA3AF" stroke-width="4"/>
+              </svg>
+            </div>
+
+            <div class="upload-action">
+              <div>
+                <span id="pick" class="link">Нажмите для загрузки</span>
+              </div>
+              <div class="small">или перетащите файл сюда</div>
+            </div>
+          </div>
+
+          <div id="preview" class="preview">
+            <span class="badge" id="fileName">Фото</span>
+            <button class="reset" id="resetBtn" type="button" aria-label="Сбросить">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M18 6 6 18M6 6l12 12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <img id="previewImg" alt="preview">
+          </div>
+
+          <input id="file" type="file" accept="image/*" hidden>
+        </div>
+      </div>
+
+      <!-- Results card -->
+      <div class="card">
+        <h3>Результаты анализа</h3>
+        <p class="sub">AI анализ с учетом ваших предпочтений</p>
+
+        <div id="emptyResults" class="results-center">
+          <div>
+            <div class="cam-ico" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M22 18h7l3-4h10l3 4h7a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H22a6 6 0 0 1-6-6V24a6 6 0 0 1 6-6Z" stroke="#9CA3AF" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M32 44a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="#9CA3AF" stroke-width="4"/>
+              </svg>
+            </div>
+            <div class="text">Загрузите фото для анализа</div>
+          </div>
+        </div>
+
+        <div id="results" class="results">
+          <div class="res-line" id="pills"></div>
+
+          <div class="block">
+            <div class="block-title">Что на фото</div>
+            <ul class="ul" id="ingredients"></ul>
+          </div>
+
+          <div class="block">
+            <div class="block-title">Рекомендации</div>
+            <ul class="ul" id="recs"></ul>
+          </div>
+
+          <div class="note" id="note"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom features -->
+    <section class="features">
+      <div class="feat">
+        <div class="ico" aria-hidden="true">🕌</div>
+        <div>
+          <h4>Религиозные предпочтения</h4>
+          <p>Учитываем требования халяль, кошер и другие религиозные ограничения</p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="ico" aria-hidden="true">🏥</div>
+        <div>
+          <h4>Состояние здоровья</h4>
+          <p>Анализ с учетом диабета, аллергий и других заболеваний</p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="ico" aria-hidden="true">📊</div>
+        <div>
+          <h4>Точный анализ</h4>
+          <p>AI определяет состав блюда и рассчитывает пищевую ценность</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      © 2026 Здоровая Жизнь. AI-powered платформа для здорового питания и образа жизни
+    </div>
+  </footer>
+
+  <script>
+    // ====== Настройка: куда отправлять фото ======
+    // Если есть Flask endpoint, поставь его сюда, например "/analyze-food"
+    const API_URL = "/analyze-food"; // можно заменить на "/predict" если используешь тот же endpoint
+
+    const drop = document.getElementById("drop");
+    const fileInput = document.getElementById("file");
+    const pick = document.getElementById("pick");
+    const preview = document.getElementById("preview");
+    const previewImg = document.getElementById("previewImg");
+    const fileName = document.getElementById("fileName");
+    const resetBtn = document.getElementById("resetBtn");
+
+    const emptyResults = document.getElementById("emptyResults");
+    const results = document.getElementById("results");
+    const pills = document.getElementById("pills");
+    const ingredients = document.getElementById("ingredients");
+    const recs = document.getElementById("recs");
+    const note = document.getElementById("note");
+
+    let currentFile = null;
+
+    function setDrag(state){
+      drop.classList.toggle("is-drag", state);
+    }
+
+    function clearResults(){
+      pills.innerHTML = "";
+      ingredients.innerHTML = "";
+      recs.innerHTML = "";
+      note.textContent = "";
+      results.style.display = "none";
+      emptyResults.style.display = "grid";
+    }
+
+    function showPreview(file){
+      currentFile = file;
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      preview.style.display = "block";
+      fileName.textContent = file.name.length > 22 ? file.name.slice(0, 22) + "…" : file.name;
+    }
+
+    function hidePreview(){
+      currentFile = null;
+      preview.style.display = "none";
+      previewImg.src = "";
+      fileInput.value = "";
+      clearResults();
+    }
+
+    function pill(text, kind="blue"){
+      const cls = kind === "green" ? "pill green" : kind === "orange" ? "pill orange" : "pill";
+      return `<span class="${cls}">${text}</span>`;
+    }
+
+    function li(text){ return `<li>${text}</li>`; }
+
+    // ====== Демо-анализ (если бекенда нет) ======
+    function fakeAnalyze(){
+      // просто пример, чтобы UI “ожил”
+      const demo = {
+        dish: "Салат / блюдо с овощами",
+        calories: 420,
+        protein_g: 18,
+        carbs_g: 45,
+        fat_g: 14,
+        ingredients: [
+          "Овощи (помидоры, огурцы)",
+          "Белковый компонент (курица/сыр/яйцо) — возможно",
+          "Соус или масло (оливковое/растительное)"
+        ],
+        recs: [
+          "Если есть цель похудение — уменьшите количество соуса/масла",
+          "Добавьте больше белка (курица/рыба/бобовые) для сытости",
+          "При диабете — следите за порцией углеводов и соусами"
+        ],
+        note: "Для более точного анализа сделайте фото ближе и при хорошем освещении."
+      };
+      return demo;
+    }
+
+    async function analyze(file){
+      // Если endpoint не существует — упадёт, тогда используем demo
+      const fd = new FormData();
+      fd.append("image", file);
+
+      // ТУТ можно передавать предпочтения пользователя:
+      // fd.append("diet", "halal");
+      // fd.append("health", "diabetes");
+
+      try{
+        const r = await fetch(API_URL, { method:"POST", body: fd });
+        if(!r.ok) throw new Error("Bad response " + r.status);
+        return await r.json();
+      }catch(e){
+        // fallback: демо
+        return fakeAnalyze();
+      }
+    }
+
+    async function renderAnalysis(file){
+      clearResults(); // сброс
+      // показываем “загрузите фото” пока не готово? — лучше сразу показать результаты после получения
+      emptyResults.querySelector(".text").textContent = "Анализируем фото…";
+
+      const data = await analyze(file);
+
+      // Нормализуем: поддержим и demo, и возможный backend json
+      const dish = data.dish || data.name || "Блюдо";
+      const calories = data.calories ?? data.kcal ?? 0;
+      const protein = data.protein_g ?? data.protein ?? 0;
+      const carbs = data.carbs_g ?? data.carbs ?? 0;
+      const fat = data.fat_g ?? data.fat ?? 0;
+
+      const ing = data.ingredients || data.composition || [];
+      const rec = data.recs || data.recommendations || [];
+      const n = data.note || data.notes || "";
+
+      pills.innerHTML =
+        pill(dish, "orange") +
+        pill(`${calories} ккал`, "green") +
+        pill(`Б: ${protein}г`) +
+        pill(`У: ${carbs}г`) +
+        pill(`Ж: ${fat}г`);
+
+      ingredients.innerHTML = ing.length ? ing.map(li).join("") : li("Не удалось определить состав. Попробуйте другое фото.");
+      recs.innerHTML = rec.length ? rec.map(li).join("") : li("Рекомендаций пока нет. Уточните цели и ограничения.");
+
+      note.textContent = n;
+
+      emptyResults.style.display = "none";
+      results.style.display = "block";
+    }
+
+    // ====== События загрузки ======
+    pick.addEventListener("click", () => fileInput.click());
+
+    drop.addEventListener("click", (e) => {
+      // если клик по кресту — не открывать выбор файла
+      if (e.target.closest("#resetBtn")) return;
+      fileInput.click();
+    });
+
+    drop.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        fileInput.click();
+      }
+    });
+
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files?.[0];
+      if(!file) return;
+      showPreview(file);
+      await renderAnalysis(file);
+    });
+
+    resetBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      hidePreview();
+      emptyResults.querySelector(".text").textContent = "Загрузите фото для анализа";
+    });
+
+    // Drag & Drop
+    ["dragenter","dragover"].forEach(evt => {
+      drop.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDrag(true);
+      });
+    });
+    ["dragleave","drop"].forEach(evt => {
+      drop.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDrag(false);
+      });
+    });
+
+    drop.addEventListener("drop", async (e) => {
+      const file = e.dataTransfer?.files?.[0];
+      if(!file) return;
+      fileInput.files = e.dataTransfer.files; // чтобы change логика совпала
+      showPreview(file);
+      await renderAnalysis(file);
+    });
+
+    // initial state
+    clearResults();
+  </script>
+</body>
+</html>
